@@ -16,7 +16,7 @@ def handle_post_request():
 
 @app.route('/', methods=['GET'])
 def handle_get_request():
-    return 'sdvsdvsdsdv'
+    return 'TEST'
 
 if __name__ == '__main__':
     app.run()
