@@ -6,9 +6,11 @@ app = Flask(__name__)
 
 @app.route('/post', methods=['POST'])
 def handle_post_request():
-    data = request.get_json(force=True)
-    name = data["name"]
-    phone = data['phone']
+    data = request.form
+    if data.get("test"):
+        return "test"
+    name = data.get("name")
+    phone = data.get("phone")
 
     try:
         params = {
