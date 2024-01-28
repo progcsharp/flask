@@ -44,7 +44,7 @@ def handle_post_request():
 
 @app.route('/', methods=['GET'])
 def handle_get_request():
-    return 'TEST'
+    return 'The server is working correctly'
 
 
 if __name__ == '__main__':
