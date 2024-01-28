@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import requests
 
 app = Flask(__name__)
@@ -18,28 +18,33 @@ def handle_post_request():
     phone = request.form.get('phone')
     web = request.form.get('web')
 
-    if name == '' or phone == []:
-        return 'Error: Name and phone are required fields'
+    if not name or not phone:
+        return jsonify({'error': 'Name and phone are required fields'}), 400
 
-    params = {
-        'fields[TITLE]': title,
-        'fields[NAME]': name,
-        'fields[SECOND_NAME]': second_name,
-        'fields[LAST_NAME]': last_name,
-        'fields[STATUS_ID]': status_id,
-        'fields[OPENED]': opened,
-        'fields[ASSIGNED_BY_ID]': int(assigned_by_id),
-        'fields[CURRENCY_ID]': currency_id,
-        'fields[OPPORTUNITY]': int(opportunity),
-        'fields[PHONE]': int(phone),
-        'fields[WEB]': web
-    }
+    try:
+        params = {
+            'fields[TITLE]': title,
+            'fields[NAME]': name,
+            'fields[SECOND_NAME]': second_name,
+            'fields[LAST_NAME]': last_name,
+            'fields[STATUS_ID]': status_id,
+            'fields[OPENED]': opened,
+            'fields[ASSIGNED_BY_ID]': int(assigned_by_id),
+            'fields[CURRENCY_ID]': currency_id,
+            'fields[OPPORTUNITY]': float(opportunity),
+            'fields[PHONE]': phone,
+            'fields[WEB]': web
+        }
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
 
-    # Отправка GET запроса на другой сервис
-    response = requests.get('https://crm-myhome.com/rest/1/so6i37j8xwrpjmbq/crm.lead.add.json',
-                            params=params)
+    try:
+        response = requests.get('https://crm-myhome.com/rest/1/so6i37j8xwrpjmbq/crm.lead.add.json', params=params)
+        response.raise_for_status()
+    except requests.RequestException as e:
+        return jsonify({'error': str(e)}), 500
 
-    return response.text
+    return jsonify(response.json())
 
 
 @app.route('/', methods=['GET'])
@@ -48,4 +53,4 @@ def handle_get_request():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=1234)
