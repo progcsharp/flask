@@ -15,7 +15,7 @@ def handle_post_request():
     try:
         params = {
             'fields[NAME]': name,
-            'fields[PHONE]': phone
+            'fields[PHONE][0][VALUE]': phone
         }
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
