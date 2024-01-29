@@ -21,7 +21,7 @@ def handle_post_request():
         return jsonify({'error': str(e)}), 400
 
     try:
-        link = f'https://webhook.site/b50e3fbc-129b-4076-a869-de0669d2d3aa'
+        link = f'https://crm-myhome.com/rest/1/so6i37j8xwrpjmbq/crm.lead.add.json'
         print(link)
         response = requests.get(link, params=params)
         response.raise_for_status()
